@@ -59,7 +59,8 @@
 }
 
 .hidden {
-    display: none;
+    opacity: 0.4;
+    cursor: default;
 }
 
 .label {
@@ -72,24 +73,32 @@
 
 @media screen and (max-width: 575.98px) {
     .pagination {
-        gap: 7px;
+        gap: 10px;
         margin-top: 2.4rem;
         margin-bottom: 1rem;
     }
 
     .btn {
-        font-size: 16px;
-        line-height: 34px;
-        height: 34px;
-        width: 34px;
+        font-size: 15px;
+        line-height: 36px;
+        height: 36px;
+        width: 36px;
+    }
+
+    .span {
+        letter-spacing: 2px;
+    }
+
+    .arrow {
+        display: none;
     }
 }
 
 @media screen and (max-width: 400px) {
     .btn {
-        font-size: 16px;
-        line-height: 32px;
-        height: 32px;
-        width: 32px;
+        font-size: 15px;
+        line-height: 34px;
+        height: 34px;
+        width: 34px;
     }
 }

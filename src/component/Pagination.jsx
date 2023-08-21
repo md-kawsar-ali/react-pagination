@@ -6,36 +6,50 @@ function Pagination({
     onPageChange,
     totalItemsCount,
     itemsPerPage,
+    range = 1,
 }) {
     // Calculate total pages (Range)
     const totalPages = Math.ceil(totalItemsCount / itemsPerPage);
 
-    // Visible Page Numbers
-    let visiblePageNumbers = [];
+    // Generate Visible Page Numbers
+    const getVisiblePageNumbers = () => {
+        const firstPage = 1;
+        const lastPage = totalPages;
 
-    // Logic for inserting the visible page numbers in the Array
-    if (currentPage <= 3) {
-        visiblePageNumbers = [1, 2, 3, 4, '...', totalPages];
-    } else if (currentPage >= totalPages - 2) {
-        visiblePageNumbers = [
-            1,
-            '...',
-            totalPages - 3,
-            totalPages - 2,
-            totalPages - 1,
-            totalPages,
-        ];
-    } else {
-        visiblePageNumbers = [
-            1,
-            '...',
-            currentPage - 1,
-            currentPage,
-            currentPage + 1,
-            '...',
-            totalPages,
-        ];
-    }
+        if (currentPage <= range + 1) {
+            return [
+                ...Array.from(
+                    { length: range * 2 + 1 },
+                    (_, i) => i + firstPage
+                ),
+                '...',
+                lastPage,
+            ];
+        } else if (currentPage >= lastPage - range) {
+            return [
+                firstPage,
+                '...',
+                ...Array.from(
+                    { length: range * 2 + 1 },
+                    (_, i) => lastPage - range * 2 + i
+                ),
+            ];
+        } else {
+            return [
+                firstPage,
+                '...',
+                ...Array.from(
+                    { length: range * 2 + 1 },
+                    (_, i) => currentPage - range + i
+                ),
+                '...',
+                lastPage,
+            ];
+        }
+    };
+
+    // Visible Page Numbers
+    let visiblePageNumbers = getVisiblePageNumbers();
 
     // Handle Page Click
     const handlePageClick = (page) => {
@@ -72,16 +86,23 @@ function Pagination({
         }
     };
 
-    // Dynamic Styling
-    const prevStyle = `${Styles.btn} ${currentPage === 1 ? Styles.hidden : ''}`;
-    const nextStyle = `${Styles.btn} ${
+    // Dynamic Styling (Prev and Next Button)
+    const prevStyle = `${Styles.btn} ${Styles.arrow} ${
+        currentPage === 1 ? Styles.hidden : ''
+    }`;
+
+    const nextStyle = `${Styles.btn} ${Styles.arrow} ${
         currentPage === totalPages ? Styles.hidden : ''
     }`;
 
     return (
         <>
             <div className={Styles.pagination}>
-                <button onClick={handlePreviousPage} className={prevStyle}>
+                <button
+                    onClick={handlePreviousPage}
+                    className={prevStyle}
+                    disabled={currentPage === 1}
+                >
                     <strong className={Styles.strong}>&lt;</strong>
                 </button>
 
@@ -106,7 +127,11 @@ function Pagination({
                     </button>
                 ))}
 
-                <button onClick={handleNextPage} className={nextStyle}>
+                <button
+                    onClick={handleNextPage}
+                    className={nextStyle}
+                    disabled={currentPage === totalPages}
+                >
                     <strong className={Styles.strong}>&gt;</strong>
                 </button>
             </div>

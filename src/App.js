@@ -28,20 +28,24 @@ function App() {
     fetchPosts();
   }, [currentPage, skip, itemsPerPage]);
 
-  // HandlePageChange
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-
-    // Scroll to Top
+  // Go to top
+  const gotToTop = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
   }
 
+  // HandlePageChange
+  const handlePageChange = async (newPage) => {
+    await setCurrentPage(newPage);
+
+    gotToTop();
+  }
+
   return (
     <div className='App'>
-      <h1>Our Amazing Posts</h1>
+      <h1>ReactJS Pagination</h1>
       <ul>
         {posts.map((post) => (
           <li key={post.id}>
@@ -57,6 +61,7 @@ function App() {
         totalItemsCount={totalItemsCount}
         itemsPerPage={itemsPerPage}
         onPageChange={handlePageChange}
+        range={1} // Range: Number of items before & after active
       />
     </div>
   );
